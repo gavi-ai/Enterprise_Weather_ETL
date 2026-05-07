@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import numpy as np
 
 print("🛠️ [SYSTEM]: Starting transformation of silver data...")
 
@@ -39,6 +40,16 @@ try:
     # 4. Calculate delivery duration
     merged_df['delivery_time'] = pd.to_datetime(merged_df['delivery_time'])
     merged_df['delivery_duration'] = (merged_df['delivery_time'] - merged_df['order_time']).dt.total_seconds() / 60
+    
+    import numpy as np # Top pe add kar lena agar nahi hai
+
+    print("💸 [ENGINE]: Applying Dynamic Surge Pricing...")
+    # Rainy = +25% Surge, Cloudy = +5% Surge, Sunny = Normal (1.0)
+    merged_df['surge_multiplier'] = np.where(merged_df['weather_condition'] == 'Rainy', 1.25, 
+                                np.where(merged_df['weather_condition'] == 'Cloudy', 1.05, 1.00))
+
+    # Naya column banega total paise ka
+    merged_df['final_revenue'] = merged_df['order_amount'] * merged_df['surge_multiplier']
     
     # Drop the temporary date column (FinOps optimization)
     merged_df.drop(columns=['date'], inplace=True)

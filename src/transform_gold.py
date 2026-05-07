@@ -17,7 +17,7 @@ try:
         total_orders=pd.NamedAgg(column='order_id', aggfunc='count'),
         avg_delivery_duration=pd.NamedAgg(column='delivery_duration', aggfunc='mean'),
         # BUG FIXED: Changed 'order_value' to 'order_amount'
-        total_revenue=pd.NamedAgg(column='order_amount', aggfunc='sum') 
+        total_revenue=pd.NamedAgg(column='final_revenue', aggfunc='sum')
     ).reset_index()
     
     # 3. Clean up the numbers for the final dashboard presentation
